@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "MVC-AngualatJs Tutorial";
+}
+<h2>MVC-AngualatJs Tutorial : Pupulate dropdownlist </h2>
+<div ng-app="mvcapp" ng-controller="AngularController">
+    <select ng-model="selected" ng-options="x.id as x.cityname for x in CityLists | orderBy:'cityname'">
+        <option value="">--Select City--</option>
+    </select>
+</div>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.js"></script>
+<script>
+    var angular = angular.module('mvcapp', []);
+    angular.controller('AngularController', function ($scope, CityService) {
+        GetAllCity();
+
+        function GetAllCity() {
+            var getAllcity = CityService.Getcity();
+            getAllcity.then(function (cityname) {
+                $scope.CityLists = cityname.data;
+            }, function () {
+                alert('Records not found');
+            });
+        }
+    })
+    angular.service("CityService", function ($http) {
+        this.Getcity = function () {
+            return $http.get("/Home/Getcity");
+        };
+    });
+</script>
